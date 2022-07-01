@@ -17,11 +17,11 @@ public class TextFinder {
 		imageFile = image;		
 	}
 	
-	private String findText() {
+	// библиотека тессеракт находит текст из картинки
+	private String findText() { 
 		Tesseract tes = new Tesseract();
-		tes.setDatapath("tessdata");
 		tes.setOcrEngineMode(1);
-		tes.setLanguage("rus+eng");		
+		tes.setLanguage("eng+rus");		
 		
 		try {
 			String text = tes.doOCR(imageFile);
@@ -30,12 +30,13 @@ public class TextFinder {
 		} catch (TesseractException e) {
 			
 			System.out.println("exception " + e.getMessage());
-			return "";
+			return "failed";
 		}
 		
 	}
 	
-	private ArrayList<String> splitText(){
+	//текст делится пробелами и записывается в лист
+	private ArrayList<String> splitText(){ 
 		String[] messages = findText().split(" ");
 		ArrayList<String> result = new ArrayList<String>();
 		for(int k =0;k<messages.length;k++) {
@@ -44,25 +45,24 @@ public class TextFinder {
 		return result;
 	}
 	
-	public String toString() {
+	//массив переделывается в одну строчку, каждое слово с новой строки
+	public String toString() { 
 		String result = "";
 		for(String s : splitText()) {
-			result += "\n" + s;
+			result += s + "\n";
 		}
 		return result;
 	}
-	
-	public void createResultFile(String filename) {
+	//создание текстового файла с результатомв той же папке где и находится картинка
+	public void createResultFile(String filename, String outputPath) {
 		try {
-			BufferedWriter writer = new BufferedWriter(new FileWriter(".\\results\\" + filename + ".txt"));
-			ArrayList<String> lines = splitText();
-			for(String s : lines) {
-				writer.write("\n" + s);
-			}
+			BufferedWriter writer = new BufferedWriter(new FileWriter(outputPath +"\\" + filename + ".txt" ));
+			writer.write(toString());;			
 			writer.close();
 			
 		} catch (IOException e) {
 			e.printStackTrace();
+
 		}
 		
 		

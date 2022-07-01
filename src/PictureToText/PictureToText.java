@@ -1,29 +1,27 @@
 package PictureToText;
 
 import java.io.File;
-import java.util.Scanner;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class PictureToText {
 
-	private static Scanner scanner;
+	
 
 	public static void main(String[] args) {
 		
-		scanner = new Scanner(System.in);
+		//создание окна с выбором файлов jpeg или png
 		JFileChooser fileChooser = new JFileChooser();
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("JPEG & PNG Images", "jpeg", "png");
 		fileChooser.setFileFilter(filter);
 		fileChooser.setCurrentDirectory(new File(".\\testImages"));
-		int response = fileChooser.showOpenDialog(null);
 		
-		if(response == JFileChooser.APPROVE_OPTION) {
-			File file = new File(fileChooser.getSelectedFile().getAbsolutePath());			
-			TextFinder tf = new TextFinder(file);
-			System.out.println("write filename in the console");
+		//если окно с выбором не закрыто текст считывается и создаётся файл с результатом
+		if(fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 			
-			tf.createResultFile(scanner.nextLine());
+			File file = fileChooser.getSelectedFile();			
+			TextFinder tf = new TextFinder(file);			
+			tf.createResultFile("PictureToTextResult",fileChooser.getCurrentDirectory().getAbsolutePath() );
 		}
 		else {
 			System.out.println("Canceled");
