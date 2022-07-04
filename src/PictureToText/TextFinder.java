@@ -12,25 +12,29 @@ import net.sourceforge.tess4j.TesseractException;
 public class TextFinder {
 	
 	private File imageFile;
+	String tessdataPath;
 	
-	public TextFinder(File image) {
-		imageFile = image;		
+	// конструктор
+	public TextFinder(File image, String languagesDataPath) {
+		imageFile = image;
+		tessdataPath = languagesDataPath;
 	}
 	
 	// библиотека тессеракт находит текст из картинки
 	private String findText() { 
 		Tesseract tes = new Tesseract();
-		tes.setOcrEngineMode(1);
-		tes.setLanguage("eng+rus");		
+		
+		tes.setDatapath(tessdataPath);// установка пути к языками
+		tes.setLanguage("eng+rus"); // установка языков	
 		
 		try {
-			String text = tes.doOCR(imageFile);
+			String text = tes.doOCR(imageFile); //получение текста
 			return text;
 			
 		} catch (TesseractException e) {
 			
 			System.out.println("exception " + e.getMessage());
-			return "failed";
+			return e.getMessage(); // возвращение вместо текста с ошибкой вместо текста с картинки в случае ошибки
 		}
 		
 	}
@@ -62,7 +66,7 @@ public class TextFinder {
 			
 		} catch (IOException e) {
 			e.printStackTrace();
-
+			
 		}
 		
 		

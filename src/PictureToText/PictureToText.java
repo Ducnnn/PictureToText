@@ -10,18 +10,22 @@ public class PictureToText {
 
 	public static void main(String[] args) {
 		
-		//создание окна с выбором файлов jpeg или png
-		JFileChooser fileChooser = new JFileChooser();
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("JPEG & PNG Images", "jpeg", "png");
-		fileChooser.setFileFilter(filter);
-		fileChooser.setCurrentDirectory(new File(".\\testImages"));
 		
-		//если окно с выбором не закрыто текст считывается и создаётся файл с результатом
-		if(fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-			
-			File file = fileChooser.getSelectedFile();			
-			TextFinder tf = new TextFinder(file);			
-			tf.createResultFile("PictureToTextResult",fileChooser.getCurrentDirectory().getAbsolutePath() );
+		JFileChooser fileChooser = new JFileChooser(); //выбиратель файлов
+
+		fileChooser.setCurrentDirectory(new File(".\\testImages"));
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("Traineddata", "traineddata");//филтр для языков
+		fileChooser.setFileFilter(filter);
+		
+		if(fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {  //окно с выбором папки с языками
+			String path = fileChooser.getCurrentDirectory().getAbsolutePath();
+			filter = new FileNameExtensionFilter("JPEG & PNG Images", "jpeg", "png", "jpg");//фильтр для картинок
+			fileChooser.setFileFilter(filter);
+			if(fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) { //окно выбора картинки
+				File file = fileChooser.getSelectedFile();  //выбранная картинка
+				TextFinder tf = new TextFinder(file,path);			
+				tf.createResultFile("PictureToTextResult",fileChooser.getCurrentDirectory().getAbsolutePath());  // создание txt файла
+			}
 		}
 		else {
 			System.out.println("Canceled");
